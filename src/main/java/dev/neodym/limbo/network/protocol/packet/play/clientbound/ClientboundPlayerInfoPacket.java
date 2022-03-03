@@ -149,7 +149,7 @@ public record ClientboundPlayerInfoPacket(
       this(
           player.profile(),
           player.gamemode(),
-          player.metadata().get(EntityDataAccessor.CUSTOM_NAME).get().orElse(null)
+          player.metadata().get(EntityDataAccessor.CUSTOM_NAME).orElse(Optional.empty()).orElse(null)
       );
     }
   }

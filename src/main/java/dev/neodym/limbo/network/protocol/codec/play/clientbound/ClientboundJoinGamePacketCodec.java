@@ -9,11 +9,7 @@ import dev.neodym.limbo.world.dimension.DimensionType;
 import io.netty.handler.codec.DecoderException;
 import java.util.Arrays;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.ArrayBinaryTag;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.BinaryTagLike;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientboundJoinGamePacketCodec implements PacketCodec<ClientboundJoinGamePacket> {
@@ -28,7 +24,7 @@ public class ClientboundJoinGamePacketCodec implements PacketCodec<ClientboundJo
     buf.write(packet.previousGamemode().id());
     buf.writeArray(packet.worldNames().stream().map(Key::asString).toArray(String[]::new));
     buf.write(CODEC, CompoundBinaryTag.class);
-    buf.write(packet.dimensionType().asBinaryTag(), CompoundBinaryTag.class);
+    buf.write(packet.dimensionType().data(), CompoundBinaryTag.class);
     buf.write(packet.dimension().asString());
     buf.write(packet.hashedSeed());
     buf.write(-1); // unused

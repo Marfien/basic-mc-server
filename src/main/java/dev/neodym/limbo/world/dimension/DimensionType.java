@@ -2,11 +2,14 @@ package dev.neodym.limbo.world.dimension;
 
 import dev.neodym.limbo.util.palette.CodecGlobalPalette;
 import dev.neodym.limbo.util.palette.KeyedBinaryTagLike;
+import java.io.IOException;
 import java.util.OptionalLong;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.TagStringIO;
 import org.jetbrains.annotations.NotNull;
 
 @ToString
@@ -91,6 +94,10 @@ public final class DimensionType implements KeyedBinaryTagLike {
   @Override
   public @NotNull CompoundBinaryTag asBinaryTag() {
     return this.asCompound;
+  }
+
+  public @NotNull CompoundBinaryTag data() {
+    return this.asCompound.getCompound("element");
   }
 
   public @NotNull Key infiniburn() {
