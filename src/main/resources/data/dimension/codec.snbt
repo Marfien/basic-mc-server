@@ -1,0 +1,122 @@
+{
+    "minecraft:dimension_type": {
+        type: "minecraft:dimension_type",
+        value: [
+            {
+                name: "minecraft:overworld",
+                id: 0,
+                element: {
+                    infiniburn: "minecraft:infiniburn_overworld",
+                    effects: "minecraft:overworld",
+                    ultrawarm: 0b,
+                    logical_height: 384,
+                    height: 384,
+                    natural: 1b,
+                    min_y: -64,
+                    bed_works: 1b,
+                    coordinate_scale: 1.0d,
+                    piglin_safe: 0b,
+                    has_skylight: 1b,
+                    has_ceiling: 0b
+                    ambient_light: 0.0f,
+                    has_raids: 1b,
+                    respawn_anchor_works: 0b,
+                }
+            },
+            {
+                name: "minecraft:overworld_caves",
+                id: 1,
+                element: {
+                    infiniburn: "minecraft:infiniburn_overworld",
+                    effects: "minecraft:overworld",
+                    ultrawarm: 0b,
+                    logical_height: 384,
+                    height: 384,
+                    natural: 1b,
+                    min_y: -64,
+                    bed_works: 1b,
+                    coordinate_scale: 1.0d,
+                    piglin_safe: 0b,
+                    has_skylight: 1b,
+                    has_ceiling: 1b
+                    ambient_light: 0.0f,
+                    has_raids: 1b,
+                    respawn_anchor_works: 0b,
+                }
+            },
+            {
+                name: "minecraft:the_nether",
+                id: 2,
+                element: {
+                    infiniburn: "minecraft:infiniburn_nether",
+                    effects: "minecraft:the_nether",
+                    ultrawarm: 1b,
+                    logical_height: 128,
+                    height: 256,
+                    natural: 0b,
+                    min_y: 0,
+                    bed_works: 0b,
+                    fixed_time: 18000L, //
+                    coordinate_scale: 8.0d,
+                    piglin_safe: 1b,
+                    has_ceiling: 1b
+                    has_skylight: 0b,
+                    ambient_light: 0.10000000149011612f,
+                    has_raids: 0b,
+                    respawn_anchor_works: 1b,
+                }
+            },
+            {
+                name: "minecraft:the_end",
+                id: 3,
+                element: {
+                    infiniburn: "minecraft:infiniburn_end",
+                    effects: "minecraft:the_end",
+                    ultrawarm: 0b,
+                    logical_height: 256,
+                    height: 256,
+                    natural: 0b,
+                    min_y: 0,
+                    bed_works: 0b,
+                    fixed_time: 6000L,
+                    coordinate_scale: 1.0d,
+                    piglin_safe: 0b,
+                    has_ceiling: 0b
+                    has_skylight: 0b,
+                    ambient_light: 0.0f,
+                    has_raids: 1b,
+                    respawn_anchor_works: 0b,
+                }
+            }
+        ]
+    },
+    "minecraft:worldgen/biome": {
+        type: "minecraft:worldgen/biome",
+        value: [
+            {
+                name: "minecraft:the_void",
+                id: 0,
+                element: {
+                    precipitation: "none",
+                    effects: {
+                        sky_color: 8103167,
+                        water_fog_color: 329011,
+                        fog_color: 12638463,
+                        water_color: 4159204,
+                        mood_sound: {
+                            tick_delay: 6000,
+                            offset: 2.0d,
+                            sound: "minecraft:ambient.cave",
+                            block_search_extent: 8
+                        }
+                    },
+                    depth: 0.1f,
+                    temperature: 0.5f,
+                    scale: 0.2f,
+                    downfall: 0.5f,
+                    category: "none"
+                }
+            }
+        ]
+    }
+}

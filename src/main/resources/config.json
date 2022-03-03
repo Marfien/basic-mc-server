@@ -1,0 +1,21 @@
+{
+  "name": "LimboServer",
+  "address": {
+    "ip": "localhost",
+    "port": 65535
+  },
+  "readTimeout": 30000,
+  "velocitySecret": "secret-token",
+  "slots": 50,
+  "ping": {
+    "description": {
+      "text": "A simple LimboServer",
+      "color": "#AAAAAA"
+    }
+  },
+  "spawn": {
+    "x": 0,
+    "y": 64,
+    "z": 0
+  }
+}
