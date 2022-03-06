@@ -28,7 +28,7 @@ public class ServerboundPlayerPositionAndLookCodec implements PacketCodec<Server
         new Position(
             buf.read(double.class),
             buf.read(double.class),
-            buf.read(double.class),
+            buf.read(double.class), // Here is an error thrown; but why?
             buf.read(float.class),
             buf.read(float.class)
         ),

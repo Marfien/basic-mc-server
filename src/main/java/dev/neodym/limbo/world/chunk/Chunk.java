@@ -97,7 +97,7 @@ public class Chunk {
   }
 
   public static int forChunk(final double coordinate) {
-    return ((int) Math.floor(coordinate)) / 16;
+    return (int) Math.floor(coordinate) >> 4;
   }
 
 }

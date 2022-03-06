@@ -3,7 +3,7 @@ package dev.neodym.limbo.network.protocol.codec.play.clientbound;
 import dev.neodym.limbo.network.LimboByteBuf;
 import dev.neodym.limbo.network.protocol.codec.PacketCodec;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundBlockChangePacket;
-import dev.neodym.limbo.util.Vec3I;
+import dev.neodym.limbo.util.math.Vec3I;
 import dev.neodym.limbo.world.block.preset.BlockPreset;
 import io.netty.handler.codec.DecoderException;
 import org.jetbrains.annotations.NotNull;

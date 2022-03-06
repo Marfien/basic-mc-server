@@ -36,9 +36,14 @@ public class GameProfileResolver {
         .build();
 
     final HttpResponse response = this.client.execute(request);
-    return LimboServer.get()
-        .gson()
-        .fromJson(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8), GameProfile.class);
+
+    try {
+      return LimboServer.get()
+          .gson()
+          .fromJson(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8), GameProfile.class);
+    } catch (final Exception e) {
+      return new GameProfile(playerId, "Player"); // debug
+    }
   }
 
   public boolean cached(final @NotNull UUID playerId) {

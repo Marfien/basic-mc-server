@@ -1,6 +1,6 @@
 package dev.neodym.limbo.world.block.preset;
 
-import dev.neodym.limbo.util.Vec3I;
+import dev.neodym.limbo.util.math.Vec3I;
 import dev.neodym.limbo.world.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 

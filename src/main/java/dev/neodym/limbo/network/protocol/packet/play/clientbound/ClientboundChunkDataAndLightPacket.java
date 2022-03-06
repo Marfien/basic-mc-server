@@ -23,7 +23,7 @@ public record ClientboundChunkDataAndLightPacket(
     this(chunk.coordinates(), new ChunkData(chunk), new LightData()); // TODO
   }
 
-  private static class ChunkData {
+  public static class ChunkData {
 
     private final CompoundBinaryTag heightmaps;
     private final byte[] chunkData;
@@ -41,7 +41,7 @@ public record ClientboundChunkDataAndLightPacket(
       // TODO blockdata
     }
 
-    private void write(final @NotNull LimboByteBuf buf) {
+    public void write(final @NotNull LimboByteBuf buf) {
       buf.write(this.heightmaps, CompoundBinaryTag.class);
       buf.writeArray(this.chunkData);
       buf.writeArray(this.blockData.toArray(BlockEntityInfo[]::new), BlockEntityInfo::write);
@@ -74,14 +74,14 @@ public record ClientboundChunkDataAndLightPacket(
       // TODO calculate light
     }
 
-    private void write(final @NotNull LimboByteBuf buf) {
+    public void write(final @NotNull LimboByteBuf buf) {
+      buf.write(this.trustEdges);
       buf.write(this.skyYMask);
       buf.write(this.blockYMask);
       buf.write(this.emptySkyYMask);
       buf.write(this.emptyBlockYMask);
       buf.writeArray(this.skyUpdates.toArray(byte[][]::new), (array, byteBuf) -> byteBuf.writeArray(array));
       buf.writeArray(this.blockUpdates.toArray(byte[][]::new), (array, byteBuf) -> byteBuf.writeArray(array));
-      buf.write(this.trustEdges);
     }
 
   }

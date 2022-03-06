@@ -1,6 +1,6 @@
 package dev.neodym.limbo.world.chunk;
 
-import dev.neodym.limbo.util.Vec3I;
+import dev.neodym.limbo.util.math.Vec3I;
 import dev.neodym.limbo.world.block.Block;
 import dev.neodym.limbo.world.block.entity.BlockEntity;
 import dev.neodym.limbo.world.block.preset.BlockPreset;

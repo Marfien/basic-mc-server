@@ -1,63 +1,51 @@
 package dev.neodym.limbo.network.protocol.packet.play.clientbound;
 
-import dev.neodym.limbo.auth.GameProfile;
-import dev.neodym.limbo.entity.Player;
-import dev.neodym.limbo.entity.data.EntityDataAccessor;
 import dev.neodym.limbo.network.LimboByteBuf;
 import dev.neodym.limbo.network.protocol.packet.Packet;
-import dev.neodym.limbo.util.GameMode;
+import dev.neodym.limbo.util.tablist.Tablist;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public record ClientboundPlayerInfoPacket(
     @NotNull ClientboundPlayerInfoPacket.Action action,
-    @NotNull Collection<PlayerData> data
+    @NotNull Collection<Tablist.TablistEntry> data
 ) implements Packet {
 
-  public ClientboundPlayerInfoPacket(final @NotNull ClientboundPlayerInfoPacket.Action action, final @NotNull PlayerData @NotNull...data) {
+  public ClientboundPlayerInfoPacket(final @NotNull ClientboundPlayerInfoPacket.Action action, final @NotNull Tablist.TablistEntry @NotNull...data) {
     this(
         action,
         Arrays.asList(data)
     );
   }
 
-  @RequiredArgsConstructor
   public enum Action {
 
-    ADD_PLAYER (0) {
+    ADD_PLAYER {
       @Override
-      public void write(final @NotNull LimboByteBuf buf, final @NotNull PlayerData data) {
-        buf.write(data.profile.uniqueId());
-        buf.write(data.profile.name());
+      public void write(final @NotNull LimboByteBuf buf, final @NotNull Tablist.TablistEntry data) {
+        buf.write(data.uniqueId());
+        buf.write(data.profile().name());
 
-        buf.write(data.profile.properties().size());
-        data.profile.properties().forEach((name, value) -> {
+        buf.write(data.profile().properties().size());
+        data.profile().properties().forEach((name, value) -> {
           buf.write(name);
           buf.write(value);
-          buf.write(false); // is signature is presented
+          buf.write(false); // is signature presented
         });
 
-        buf.write((int) data.gameMode.id());
-        buf.write(1);
+        buf.write((int) data.gamemode().id());
+        buf.write(data.ping());
 
-        if (data.name == null) {
-          buf.write(false);
-          return;
-        }
-
-        buf.write(true);
-        buf.write(data.name, Component.class);
+        buf.writeOpt(data.customName(), Component.class);
       }
 
+      /*
       @Override
       @NotNull
-      public ClientboundPlayerInfoPacket.PlayerData read(final @NotNull LimboByteBuf buf) {
+      public Tablist.TablistEntry read(final @NotNull LimboByteBuf buf) {
         final GameProfile profile = new GameProfile(buf.read(UUID.class), buf.read(String.class, 16));
 
         final int mapSize = buf.read(int.class);
@@ -69,16 +57,18 @@ public record ClientboundPlayerInfoPacket(
         final GameMode mode = GameMode.byId(buf.read(int.class));
         final Component component = buf.readEmpty(int.class).read(boolean.class) ? buf.read(Component.class) : null;
 
-        return new PlayerData(profile, mode, component);
+        return new (profile, mode, component);
       }
+       */
     },
-    UPDATE_GAMEMODE (1) {
+    UPDATE_GAMEMODE {
       @Override
-      public void write(final @NotNull LimboByteBuf buf, final @NotNull PlayerData data) {
-        buf.write(data.profile.uniqueId());
-        buf.write((int) data.gameMode.id());
+      public void write(final @NotNull LimboByteBuf buf, final @NotNull Tablist.TablistEntry data) {
+        buf.write(data.uniqueId());
+        buf.write((int) data.gamemode().id());
       }
 
+      /*
       @Override
       @NotNull
       public ClientboundPlayerInfoPacket.PlayerData read(final @NotNull LimboByteBuf buf) {
@@ -86,22 +76,23 @@ public record ClientboundPlayerInfoPacket(
         final GameMode gamemode = GameMode.byId(buf.read(int.class));
         return new PlayerData(profile, gamemode, null);
       }
+       */
     },
-    UPDATE_NAME (3) {
+    UPDATE_PING {
       @Override
-      public void write(final @NotNull LimboByteBuf buf, final @NotNull PlayerData data) {
-        buf.write(data.profile.uniqueId());
-
-        final Component component = data.name;
-        if (component == null) {
-          buf.write(false);
-          return;
-        }
-
-        buf.write(true);
-        buf.write(component, Component.class);
+      public void write(final @NotNull LimboByteBuf buf, final @NotNull Tablist.TablistEntry data) {
+        buf.write(data.uniqueId());
+        buf.write(data.ping());
+      }
+    },
+    UPDATE_CUSTOM_NAME {
+      @Override
+      public void write(final @NotNull LimboByteBuf buf, final @NotNull Tablist.TablistEntry data) {
+        buf.write(data.uniqueId());
+        buf.writeOpt(data.customName(), Component.class);
       }
 
+      /*
       @Override
       @NotNull
       public PlayerData read(final @NotNull LimboByteBuf buf) {
@@ -110,24 +101,30 @@ public record ClientboundPlayerInfoPacket(
 
         return new PlayerData(profile, GameMode.UNDEFINED, component);
       }
+       */
     },
-    REMOVE_PLAYER (4) {
+    REMOVE_PLAYER {
       @Override
-      public void write(final @NotNull LimboByteBuf buf, final @NotNull PlayerData data) {
-        buf.write(data.profile.uniqueId());
+      public void write(final @NotNull LimboByteBuf buf, final @NotNull Tablist.TablistEntry data) {
+        buf.write(data.uniqueId());
       }
 
+      /*
       @Override
       @NotNull
       public PlayerData read(final @NotNull LimboByteBuf buf) {
         return new PlayerData(new GameProfile(buf.read(UUID.class), "NaN"), GameMode.UNDEFINED, null);
       }
+       */
     };
 
-    private final int id;
+    private final int id = this.ordinal();
 
-    public abstract void write(final @NotNull LimboByteBuf buf, final @NotNull PlayerData data);
-    public abstract @NotNull ClientboundPlayerInfoPacket.PlayerData read(final @NotNull LimboByteBuf buf);
+    public abstract void write(final @NotNull LimboByteBuf buf, final @NotNull Tablist.TablistEntry data);
+
+    public @NotNull Tablist.TablistEntry read(final @NotNull LimboByteBuf buf) {
+      throw new UnsupportedOperationException("Not implemented yet.");
+    }
 
     public int id() {
       return this.id;
@@ -137,21 +134,6 @@ public record ClientboundPlayerInfoPacket(
       return Arrays.stream(values()).filter(a -> a.id == id).findFirst();
     }
 
-  }
-
-  public static record PlayerData(
-      @NotNull GameProfile profile,
-      @NotNull GameMode gameMode,
-      @Nullable Component name
-  ) {
-
-    public PlayerData(final @NotNull Player player) {
-      this(
-          player.profile(),
-          player.gamemode(),
-          player.metadata().get(EntityDataAccessor.CUSTOM_NAME).orElse(Optional.empty()).orElse(null)
-      );
-    }
   }
 
 }

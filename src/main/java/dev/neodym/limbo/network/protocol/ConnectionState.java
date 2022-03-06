@@ -9,6 +9,8 @@ import dev.neodym.limbo.network.protocol.codec.login.clientbound.ClientboundLogi
 import dev.neodym.limbo.network.protocol.codec.login.serverbound.ServerboundLoginPluginResponsePacketCodec;
 import dev.neodym.limbo.network.protocol.codec.login.serverbound.ServerboundLoginStartPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.KeepAlivePacketCodec;
+import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundChunkDataAndLightPacketCodec;
+import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundChunkUnloadPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundChunkViewPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundDeclareCommandsPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundEntityDataPacketCodec;
@@ -19,6 +21,7 @@ import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundPlaye
 import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundPlayerInfoPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundPlayerPositionPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundSoundPacketCodec;
+import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundTablistLayoutPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.clientbound.ClientboundUpdateTimePacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.serverbound.ServerboundClientSettingsPacketCodec;
 import dev.neodym.limbo.network.protocol.codec.play.serverbound.ServerboundPlayerLookPacketCodec;
@@ -40,6 +43,8 @@ import dev.neodym.limbo.network.protocol.packet.login.clientbound.ClientboundLog
 import dev.neodym.limbo.network.protocol.packet.login.serverbound.ServerboundLoginPluginResponsePacket;
 import dev.neodym.limbo.network.protocol.packet.login.serverbound.ServerboundLoginStartPacket;
 import dev.neodym.limbo.network.protocol.packet.play.KeepAlivePacket;
+import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundChunkDataAndLightPacket;
+import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundChunkUnloadPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundChunkViewPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundDeclareCommandsPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundEntityDataPacket;
@@ -50,6 +55,7 @@ import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlay
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerPositionPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundSoundPacket;
+import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundTablistLayoutPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundUpdateTimePacket;
 import dev.neodym.limbo.network.protocol.packet.play.serverbound.ServerboundClientSettingsPacket;
 import dev.neodym.limbo.network.protocol.packet.play.serverbound.ServerboundPlayerLookPacket;
@@ -119,7 +125,9 @@ public enum ConnectionState {
       new PacketRegistryEntry[] {
           new PacketRegistryEntry<>(0x12, ClientboundDeclareCommandsPacket.class, new ClientboundDeclareCommandsPacketCodec()),
           new PacketRegistryEntry<>(0x19, ClientboundNamedSoundEffectPacket.class, new ClientboundNamedSoundEffectPacketCodec()),
+          new PacketRegistryEntry<>(0x1D, ClientboundChunkUnloadPacket.class, new ClientboundChunkUnloadPacketCodec()),
           new PacketRegistryEntry<>(0x21, KeepAlivePacket.class, new KeepAlivePacketCodec()),
+          new PacketRegistryEntry<>(0x22, ClientboundChunkDataAndLightPacket.class, new ClientboundChunkDataAndLightPacketCodec()),
           new PacketRegistryEntry<>(0x26, ClientboundJoinGamePacket.class, new ClientboundJoinGamePacketCodec()),
           new PacketRegistryEntry<>(0x32, ClientboundPlayerAbilitiesPacket.class, new ClientboundPlayerAbilitiesPacketCodec()),
           new PacketRegistryEntry<>(0x36, ClientboundPlayerInfoPacket.class, new ClientboundPlayerInfoPacketCodec()),
@@ -128,7 +136,8 @@ public enum ConnectionState {
           new PacketRegistryEntry<>(0x4D, ClientboundEntityDataPacket.class, new ClientboundEntityDataPacketCodec()),
           new PacketRegistryEntry<>(0x59, ClientboundUpdateTimePacket.class, new ClientboundUpdateTimePacketCodec()),
           new PacketRegistryEntry<>(0x5C, ClientboundEntitySoundEffectPacket.class, new ClientboundEntitySoundEffectPacketCodec()),
-          new PacketRegistryEntry<>(0x5D, ClientboundSoundPacket.class, new ClientboundSoundPacketCodec())
+          new PacketRegistryEntry<>(0x5D, ClientboundSoundPacket.class, new ClientboundSoundPacketCodec()),
+          new PacketRegistryEntry<>(0x5F, ClientboundTablistLayoutPacket.class, new ClientboundTablistLayoutPacketCodec())
       }
   );
   // </editor-folder>

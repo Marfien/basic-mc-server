@@ -3,7 +3,7 @@ package dev.neodym.limbo.network.protocol.codec.play.clientbound;
 import dev.neodym.limbo.network.LimboByteBuf;
 import dev.neodym.limbo.network.protocol.codec.PacketCodec;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundNamedSoundEffectPacket;
-import dev.neodym.limbo.util.Vec3D;
+import dev.neodym.limbo.util.math.Vec3D;
 import io.netty.handler.codec.DecoderException;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;

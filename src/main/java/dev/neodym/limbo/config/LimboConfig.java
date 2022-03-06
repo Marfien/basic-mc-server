@@ -22,7 +22,8 @@ public record LimboConfig(
     @Range(from = 0, to = Integer.MAX_VALUE) int readTimeout,
     @NotNull Component description,
     @NotNull Position position,
-    @NotNull String name
+    @NotNull String name,
+    @Range(from = 2, to = Integer.MAX_VALUE) int viewDistance
 ) {
 
   @Override
@@ -75,7 +76,8 @@ public record LimboConfig(
           object.get("readTimeout").getAsInt(),
           ctx.deserialize(object.getAsJsonObject("ping").get("description"), Component.class),
           ctx.deserialize(object.get("spawn"), Position.class),
-          object.get("name").getAsString()
+          object.get("name").getAsString(),
+          object.get("viewDistance").getAsInt()
       );
     }
   }

@@ -1,7 +1,7 @@
 package dev.neodym.limbo.world.block.entity;
 
 import dev.neodym.limbo.server.Tickable;
-import dev.neodym.limbo.util.Vec3I;
+import dev.neodym.limbo.util.math.Vec3I;
 import dev.neodym.limbo.world.block.preset.BlockPreset;
 import dev.neodym.limbo.world.block.preset.Statable;
 import dev.neodym.limbo.world.block.state.BlockState;

@@ -14,6 +14,7 @@ public final class Biome implements KeyedBinaryTagLike {
   private static final CodecGlobalPalette<Biome> PALETTE = new CodecGlobalPalette<>(Key.key("worldgen/biome"));
 
   public static final Biome THE_VOID = new Biome(Key.key("the_void"), Category.NONE, Precipitation.NONE, 0.5F, 0.5F, new BiomEffects(new Color(329011), new Color(4159204), new Color(12638463), new Color(8103167), new MoodSound(Key.key("ambient.cave"), 2, 8, 6_000)));
+  public static final Biome PLAINS = new Biome(Key.key("plains"), Category.PLAINS, Precipitation.RAIN, 0.4000000059604645F, 0.800000011920929F, new BiomEffects(new Color(329011), new Color(4159204), new Color(12638463), new Color(7907327), new MoodSound(Key.key("ambient.cave"), 2, 8, 6_000)));
 
   public static @NotNull CodecGlobalPalette<Biome> palette() {
     return PALETTE;

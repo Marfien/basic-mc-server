@@ -12,6 +12,8 @@ import dev.neodym.limbo.network.PlayerConnection;
 import dev.neodym.limbo.util.NettyUtil;
 import dev.neodym.limbo.util.Position;
 import dev.neodym.limbo.util.Position.PositionTypeAdapter;
+import dev.neodym.limbo.util.tablist.GlobalTablist;
+import dev.neodym.limbo.util.tablist.Tablist;
 import dev.neodym.limbo.world.World;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -55,10 +57,11 @@ public final class LimboServer {
       .registerTypeAdapter(GameProfile.class, new GameProfile.GameProfileDeserializer())
       .create();
 
-  private final @NotNull Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
+  private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
   private final int protocolVersion = 757;
   private final NetworkManager networkManager = new NetworkManager();
   private final GameProfileResolver profileResolver = new GameProfileResolver();
+  private final Tablist globalTablist = new GlobalTablist(this.networkManager);
 
   private final EventLoopGroup bossGroup;
   private final EventLoopGroup workerGroup;
@@ -77,6 +80,8 @@ public final class LimboServer {
 
     this.config = this.loadConfig();
   }
+
+  // <editor-folder desc="Server ops" defaultstate="collapsed">
 
   public void start() {
     this.logger.info("Starting server...");
@@ -105,16 +110,6 @@ public final class LimboServer {
     this.logger.info("Done! Server started in {} seconds.", time);
   }
 
-  private void loadWorld() {
-    this.logger.info("Loading world...");
-    final long current = System.currentTimeMillis();
-
-    this.world.load();
-
-    final String time = NumberFormat.getInstance().format((System.currentTimeMillis() - current) / 1_000D);
-    this.logger.info("World loaded in {} seconds.", time);
-  }
-
   public void stop() {
     this.networkManager.connections().forEach(connection -> connection.disconnect(Component.text("Server shutting down...")));
 
@@ -125,9 +120,9 @@ public final class LimboServer {
     this.workerGroup.shutdownGracefully();
   }
 
-  private void broadcastKeepAlive() {
-    this.networkManager.connections().forEach(PlayerConnection::sendKeepAlive);
-  }
+  // </editor-folder>
+
+  // <editor-folder desc="Getters" defaultstate="collapsed">
 
   public @NotNull GameProfileResolver profileResolver() {
     return this.profileResolver;
@@ -157,6 +152,22 @@ public final class LimboServer {
     return this.protocolVersion;
   }
 
+  public @NotNull World world() {
+    return this.world;
+  }
+
+  public @NotNull Tablist globalTablist() {
+    return this.globalTablist;
+  }
+
+  // </editor-folder>
+
+  // <editor-folder desc="Utility methods" defaultstate="collapsed"
+
+  private void broadcastKeepAlive() {
+    this.networkManager.connections().forEach(PlayerConnection::sendKeepAlive);
+  }
+
   private @NotNull LimboConfig loadConfig() throws IOException {
     final File file = CONFIG_FILE.toFile();
 
@@ -172,7 +183,16 @@ public final class LimboServer {
     }
   }
 
-  public @NotNull World world() {
-    return this.world;
+  private void loadWorld() {
+    this.logger.info("Loading world...");
+    final long current = System.currentTimeMillis();
+
+    this.world.load();
+
+    final String time = NumberFormat.getInstance().format((System.currentTimeMillis() - current) / 1_000D);
+    this.logger.info("World loaded in {} seconds.", time);
   }
+
+  // </editor-folder>
+
 }

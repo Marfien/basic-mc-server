@@ -35,7 +35,7 @@ public record ClientboundJoinGamePacket(
         dimension,
         hashedSeed,
         8,
-        true,
+        false,
         false,
         false,
         true

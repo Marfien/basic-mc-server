@@ -7,7 +7,7 @@ import dev.neodym.limbo.item.Item;
 import dev.neodym.limbo.item.ItemLike;
 import dev.neodym.limbo.item.ItemStack;
 import dev.neodym.limbo.server.LimboServer;
-import dev.neodym.limbo.util.Vec3I;
+import dev.neodym.limbo.util.math.Vec3I;
 import dev.neodym.limbo.util.palette.GlobalPalette;
 import dev.neodym.limbo.world.block.Block;
 import dev.neodym.limbo.world.block.BlockFace;

@@ -59,7 +59,7 @@ public class LoginListener extends BasicPacketListener {
     this.address = new InetSocketAddress(data.read(String.class), ((InetSocketAddress) super.connection.address()).getPort());
     try {
       this.profile = SERVER.profileResolver().create(data.read(UUID.class)); // username will be given by GameProfileResolver
-    } catch (final IOException e) {
+    } catch (final Exception e) {
       this.connection.disconnect(Component.text("Cannot authenticate with Mojang."));
     }
   }

@@ -18,11 +18,9 @@ import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundDecl
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundDisconnectPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundJoinGamePacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerAbilitiesPacket;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket.Action;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket.PlayerData;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerPositionPacket;
 import dev.neodym.limbo.server.LimboServer;
+import dev.neodym.limbo.util.tablist.GlobalTablist;
 import dev.neodym.limbo.world.dimension.DimensionType;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -235,22 +233,14 @@ public class PlayerConnection extends ChannelInboundHandlerAdapter {
     this.state(ConnectionState.PLAY);
     SERVER.networkManager().addPlayer(this);
 
-    this.writePacket(
-        PacketContainer.of(
-            new ClientboundJoinGamePacket(this.player.entityId(), this.player.gamemode(), DimensionType.DEFAULT, List.of(DimensionType.DEFAULT.key()), DimensionType.DEFAULT.key(), 0L),
-            new ClientboundPlayerAbilitiesPacket(false, true, true, false),
-            new ClientboundPlayerPositionPacket(this.player.position(), (byte) 0x00, false),
-            new ClientboundDeclareCommandsPacket()
-        )
-    );
+    this.sendPacket(new ClientboundJoinGamePacket(this.player.entityId(), this.player.gamemode(), DimensionType.DEFAULT, List.of(DimensionType.DEFAULT.key()), DimensionType.DEFAULT.key(), 0L));
+    this.sendPacket(new ClientboundPlayerAbilitiesPacket(false, true, true, false));
+    this.sendPacket(new ClientboundPlayerPositionPacket(this.player.position(), (byte) 0x00, false));
+    this.sendPacket(new ClientboundDeclareCommandsPacket());
 
-    final PlayerData[] data = SERVER.networkManager().players().stream().map(PlayerData::new).toArray(PlayerData[]::new);
-    this.sendPacket(new ClientboundPlayerInfoPacket(Action.ADD_PLAYER, data));
-
-    SERVER.networkManager().spreadPacket(new ClientboundPlayerInfoPacket(
-        Action.ADD_PLAYER,
-        new PlayerData(this.player)
-    ));
+    final GlobalTablist tablist = (GlobalTablist) SERVER.globalTablist();
+    tablist.initPlayer(this.player);
+    tablist.addPlayer(this.player);
 
     SERVER.world().initPlayer(this.player);
     this.sendKeepAlive();

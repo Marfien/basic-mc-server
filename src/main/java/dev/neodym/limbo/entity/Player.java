@@ -3,13 +3,11 @@ package dev.neodym.limbo.entity;
 import dev.neodym.limbo.auth.GameProfile;
 import dev.neodym.limbo.network.PlayerConnection;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundChunkDataAndLightPacket;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundChunkViewPacket;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket.Action;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket.PlayerData;
 import dev.neodym.limbo.server.LimboServer;
 import dev.neodym.limbo.util.GameMode;
 import dev.neodym.limbo.world.block.Block;
+import dev.neodym.limbo.world.chunk.Chunk.ChunkCoordinates;
+import dev.neodym.limbo.world.chunk.ChunkMap;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
@@ -23,6 +21,8 @@ import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 
 public class Player extends LivingEntity implements Audience, BlockBreaker {
+
+  private final ChunkMap chunkMap = new ChunkMap(this);
 
   private final @NotNull PlayerConnection connection;
   private final @NotNull GameProfile profile;
@@ -55,25 +55,16 @@ public class Player extends LivingEntity implements Audience, BlockBreaker {
     this.updateChunks();
   }
 
-  private void updateChunks(final boolean forceAll) {
-    LimboServer.get()
-        .world()
-        .chunks()
-        .stream()
-        .filter(chunk -> forceAll
-            ? chunk.coordinates().distance(this.chunkX(), this.chunkZ()) <= this.viewDistance
-            : chunk.coordinates().distance(this.chunkX(), this.chunkZ()) <= this.viewDistance) // TODO filter it
-        .forEach(chunk -> {
-          this.connection.sendPacket(new ClientboundChunkDataAndLightPacket(chunk));
-        });
+  public int effectiveViewDistance() {
+    return this.chunkMap.effectiveViewDistance();
   }
 
-  public void updateChunks() {
-    this.updateChunks(false);
+  public boolean isChunkLoaded(final @NotNull ChunkCoordinates coordinates) {
+    return this.chunkMap.isLoaded(coordinates);
   }
 
   public void reloadChunks() {
-    this.updateChunks(true);
+    this.chunkMap.resend();
   }
 
   @Override
@@ -88,11 +79,15 @@ public class Player extends LivingEntity implements Audience, BlockBreaker {
 
     super.position(x, y, z, yaw, pitch);
 
-    final int newChunkX = this.chunkX();
-    final int newChunkZ = this.chunkZ();
+    final int newChunkX = super.chunkX();
+    final int newChunkZ = super.chunkZ();
 
     if (chunkX == newChunkX && chunkZ == newChunkZ) return;
     this.updateChunks();
+  }
+
+  private void updateChunks() {
+    this.chunkMap.moveTo(super.chunkX(), super.chunkZ());
   }
 
   @Override
@@ -165,10 +160,10 @@ public class Player extends LivingEntity implements Audience, BlockBreaker {
     throw new UnsupportedOperationException("Pointers are not supported on limbo!");
   }
 
-  public @NotNull void gamemode(final @NotNull GameMode gamemode) {
+  public void gamemode(final @NotNull GameMode gamemode) {
     if (gamemode == this.gamemode) return;
 
-    LimboServer.get().networkManager().spreadPacket(new ClientboundPlayerInfoPacket(Action.UPDATE_GAMEMODE, new PlayerData(this.profile, this.gamemode, null)));
+    LimboServer.get().globalTablist().updateGameMode(super.uniqueId(), gamemode);
     // TODO gamestate change packet
     this.gamemode = gamemode;
   }
@@ -176,4 +171,5 @@ public class Player extends LivingEntity implements Audience, BlockBreaker {
   public @NotNull GameMode gamemode() {
     return this.gamemode;
   }
+
 }

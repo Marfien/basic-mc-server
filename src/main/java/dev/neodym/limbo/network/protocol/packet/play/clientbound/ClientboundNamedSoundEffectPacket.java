@@ -1,7 +1,7 @@
 package dev.neodym.limbo.network.protocol.packet.play.clientbound;
 
 import dev.neodym.limbo.network.protocol.packet.Packet;
-import dev.neodym.limbo.util.Vec3D;
+import dev.neodym.limbo.util.math.Vec3D;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;

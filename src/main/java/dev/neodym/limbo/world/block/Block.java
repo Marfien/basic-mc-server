@@ -1,6 +1,6 @@
 package dev.neodym.limbo.world.block;
 
-import dev.neodym.limbo.util.Vec3I;
+import dev.neodym.limbo.util.math.Vec3I;
 import dev.neodym.limbo.world.chunk.Chunk;
 import dev.neodym.limbo.world.chunk.ChunkSection;
 import lombok.RequiredArgsConstructor;

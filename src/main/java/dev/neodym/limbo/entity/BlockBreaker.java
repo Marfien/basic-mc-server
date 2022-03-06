@@ -1,7 +1,7 @@
 package dev.neodym.limbo.entity;
 
 import dev.neodym.limbo.server.LimboServer;
-import dev.neodym.limbo.util.Vec3I;
+import dev.neodym.limbo.util.math.Vec3I;
 import dev.neodym.limbo.world.block.Block;
 import org.jetbrains.annotations.NotNull;
 

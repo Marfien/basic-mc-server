@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import dev.neodym.limbo.network.protocol.packet.Packet;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundNamedSoundEffectPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundSoundPacket;
+import dev.neodym.limbo.util.math.Vec3D;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

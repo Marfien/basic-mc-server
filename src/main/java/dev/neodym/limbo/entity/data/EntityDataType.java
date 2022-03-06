@@ -3,7 +3,7 @@ package dev.neodym.limbo.entity.data;
 import dev.neodym.limbo.network.LimboByteBuf;
 import dev.neodym.limbo.util.Direction;
 import dev.neodym.limbo.util.Position;
-import dev.neodym.limbo.util.Vec3D;
+import dev.neodym.limbo.util.math.Vec3D;
 import dev.neodym.limbo.util.VillagerData;
 import dev.neodym.limbo.util.VillagerData.VillagerProfession;
 import dev.neodym.limbo.util.VillagerData.VillagerType;

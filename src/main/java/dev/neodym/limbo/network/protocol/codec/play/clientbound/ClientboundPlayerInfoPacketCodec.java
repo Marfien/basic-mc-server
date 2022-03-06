@@ -5,7 +5,7 @@ import dev.neodym.limbo.network.LimboByteBuf;
 import dev.neodym.limbo.network.protocol.codec.PacketCodec;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket;
 import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket.Action;
-import dev.neodym.limbo.network.protocol.packet.play.clientbound.ClientboundPlayerInfoPacket.PlayerData;
+import dev.neodym.limbo.util.tablist.Tablist;
 import io.netty.handler.codec.DecoderException;
 import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ public class ClientboundPlayerInfoPacketCodec implements PacketCodec<Clientbound
 
 
   @Override
-  public void encode(@NotNull ClientboundPlayerInfoPacket packet, @NotNull LimboByteBuf buf) {
+  public void encode(final @NotNull ClientboundPlayerInfoPacket packet, final @NotNull LimboByteBuf buf) {
     buf.write(packet.action().id());
 
     buf.write(packet.data().size());
@@ -22,11 +22,9 @@ public class ClientboundPlayerInfoPacketCodec implements PacketCodec<Clientbound
   }
 
   @Override
-  public @NotNull ClientboundPlayerInfoPacket decode(@NotNull LimboByteBuf buf) throws DecoderException {
-    ClientboundPlayerInfoPacket.Action action = Action.byId(buf.read(int.class)).orElse(null); // latency does not be updated.
-    Collection<PlayerData> data = Lists.newArrayList();
-
-    if (action == null) return new ClientboundPlayerInfoPacket(action, data);
+  public @NotNull ClientboundPlayerInfoPacket decode(final @NotNull LimboByteBuf buf) throws DecoderException {
+    ClientboundPlayerInfoPacket.Action action = Action.byId(buf.read(int.class)).orElseThrow(() -> new AssertionError("Unknown action read.")); // latency does not be updated.
+    Collection<Tablist.TablistEntry> data = Lists.newArrayList();
 
     final int size = buf.read(int.class);
     for (int i = 0; i < size; i++) {
