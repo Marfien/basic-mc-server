@@ -6,4 +6,4 @@ The goal of this project is to create a server software using as few resources a
 The current version is 1.18.
 
 ## TODO/Problems
-[ ] Chunk Packets
+- [ ] Chunk Packets
